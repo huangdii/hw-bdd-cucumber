@@ -3,13 +3,14 @@
 Given /the following movies exist/ do |movies_table|
   movies_table.hashes.each do |movie|
     # each returned element will be a hash whose key is the table header.
-    m = Movie.create!(movie)
     # you should arrange to add that movie to the database here.
+    Movie.create!(movie)
   end
 end
 
 Then /(.*) seed movies should exist/ do | n_seeds |
-  Movie.count.should be n_seeds.to_i
+  #Movie.count.should be n_seeds.to_i
+  expect(Movie.count).to eq n_seeds.to_i
 end
 
 # Make sure that one string (regexp) occurs before or after another one
@@ -20,7 +21,7 @@ Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   #  page.body is the entire content of the page as a string.
   one = (page.body =~ /#{Regexp.quote(e1)}/)
   two = (page.body =~ /#{Regexp.quote(e2)}/)
-  one.should be < two
+  expect(one).to be < two
 end
 
 # Make it easier to express checking or unchecking several boxes at once
@@ -42,5 +43,5 @@ end
 
 Then /I should see all the movies/ do
   # Make sure that all the movies in the app are visible in the table
-  (page.all('table#movies tr').count - 1).should == Movie.all.count  
+  expect(page.all('table#movies tr').count - 1).to eq Movie.all.count
 end
